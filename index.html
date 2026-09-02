@@ -2,127 +2,64 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Penny Hunter</title>
+    
+    <!-- Link to your manifest file so it can be installed on phones -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#121212">
-    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #f96302; /* Home Depot Orange */
+        }
+        button {
+            background-color: #f96302;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        button:active {
+            background-color: #d15000;
+        }
+        #community-intel-list {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: left;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Penny Hunter</h1>
-        <div id="active-store-display">📍 Phoenix, OR | HD #8557</div>
-    </header>
 
-    <!-- MAIN DASHBOARD -->
-    <main id="view-home" class="view active">
-        <button onclick="app.fetchCommunityDeals()" class="btn-large highlight" style="width:100%; margin-bottom:15px;">📡 LIVE COMMUNITY INTEL</button>
+    <h1>Penny Hunter 🎯</h1>
+    
+    <!-- The Button -->
+    <button onclick="fetchCommunityDeals()">📡 LIVE COMMUNITY INTEL</button>
 
-        <div class="grid-buttons">
-            <button onclick="app.filterDeals('penny')" class="btn-large">🪙 POSSIBLE PENNIES</button>
-            <button onclick="app.filterDeals(90)" class="btn-large">🔥 90%+ OFF</button>
-            <button onclick="app.filterDeals(80)" class="btn-large">💰 80%+ OFF</button>
-            <button onclick="app.filterDeals(70)" class="btn-large">💵 70%+ OFF</button>
-            <button onclick="app.filterDeals('homedepot')" class="btn-large">🏪 HOME DEPOT</button>
-            <button onclick="app.filterDeals('lowes')" class="btn-large">🔵 LOWE'S</button>
-            <button onclick="app.startScanner()" class="btn-large highlight">📷 SCAN BARCODE</button>
-            <button onclick="app.showWatchlist()" class="btn-large">⭐ WATCHLIST</button>
-        </div>
-        
-        <div class="search-box">
-            <input type="text" id="manual-sku" placeholder="Enter SKU, UPC, or product name">
-            <button onclick="app.manualSearch()">SEARCH</button>
-        </div>
-    </main>
+    <!-- The Box Where Reddit Deals Appear -->
+    <div id="community-intel-list">
+        <p style="text-align:center; color:#666;">Press the button to scan for recent clearance and penny deals.</p>
+    </div>
 
-    <!-- COMMUNITY INTEL FEED VIEW -->
-    <main id="view-community" class="view">
-        <button class="btn-back" onclick="app.navigate('view-home')">← Back to Home</button>
-        <h2>Community Intel Feed</h2>
-        <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Live deal posts from Reddit clearance communities</p>
-        <div id="community-list-container">Loading live intel...</div>
-    </main>
-
-    <!-- WATCHLIST VIEW -->
-    <main id="view-list" class="view">
-        <button class="btn-back" onclick="app.navigate('view-home')">← Back to Home</button>
-        <h2 id="list-title">Results</h2>
-        <div id="deal-list-container"></div>
-    </main>
-
-    <!-- DEAL CALCULATOR VIEW -->
-    <main id="view-deal" class="view">
-        <button class="btn-back" onclick="app.navigate('view-home')">← Cancel</button>
-        <h2>Deal Calculator</h2>
-        
-        <div class="form-group">
-            <label>UPC / SKU</label>
-            <input type="text" id="deal-upc" readonly>
-        </div>
-        
-        <div class="retailer-links">
-            <p><strong>1. Verify Legal Sources:</strong></p>
-            <button class="btn-link" onclick="app.openURL('hd')">Open Home Depot</button>
-            <button class="btn-link" onclick="app.openURL('lowes')">Open Lowe's</button>
-            <button class="btn-link" onclick="app.openURL('ebay')">Check eBay (Sold)</button>
-        </div>
-
-        <div class="form-group">
-            <label>Product Name (Optional)</label>
-            <input type="text" id="deal-name" placeholder="Item name">
-        </div>
-
-        <div class="form-group">
-            <p><strong>2. Enter Observed Data:</strong></p>
-            <label>Retailer / Store</label>
-            <select id="deal-store">
-                <option value="Home Depot #8557">Home Depot Phoenix #8557</option>
-                <option value="Lowe's Medford">Lowe's Medford</option>
-            </select>
-        </div>
-
-        <div class="grid-2">
-            <div class="form-group">
-                <label>Reference Price ($)</label>
-                <input type="number" id="deal-ref-price" step="0.01" oninput="app.calculateScores()">
-            </div>
-            <div class="form-group">
-                <label>Current Price ($)</label>
-                <input type="number" id="deal-cur-price" step="0.01" oninput="app.calculateScores()">
-            </div>
-        </div>
-        
-        <div class="form-group checkbox">
-            <input type="checkbox" id="deal-verified">
-            <label for="deal-verified">This price is VERIFIED</label>
-        </div>
-
-        <div class="grid-2">
-            <div class="form-group">
-                <label>Realistic Resale ($)</label>
-                <input type="number" id="deal-resale-price" step="0.01" oninput="app.calculateScores()">
-            </div>
-            <div class="form-group">
-                <label>Est. Shipping ($)</label>
-                <input type="number" id="deal-shipping" value="7.00" step="0.01" oninput="app.calculateScores()">
-            </div>
-        </div>
-
-        <div id="live-scores" class="score-card"></div>
-
-        <button class="btn-large highlight" style="margin-top:20px" onclick="app.saveDeal()">💾 SAVE TO WATCHLIST</button>
-    </main>
-
-    <!-- SCANNER VIEW -->
-    <main id="view-scanner" class="view">
-        <button class="btn-back" onclick="app.stopScanner()">← Stop Scanner</button>
-        <h2>Scan Barcode</h2>
-        <div id="video-container">
-            <video id="camera-stream" autoplay playsinline></video>
-        </div>
-        <p id="scanner-status">Requesting camera...</p>
-    </main>
-
+    <!-- Link to your JavaScript -->
     <script src="app.js"></script>
 </body>
 </html>
