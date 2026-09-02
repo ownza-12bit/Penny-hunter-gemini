@@ -1,11 +1,11 @@
-const CACHE_NAME = 'penny-hunter-v2';
+const CACHE_NAME = 'penny-hunter-v3';
 
-// 1. Install & immediately force the new version to take over
+// Install immediately without waiting for app close
 self.addEventListener('install', (event) => {
-    self.skipWaiting(); // MAGIC FIX: Don't wait for the user to close the app!
+    self.skipWaiting();
 });
 
-// 2. Activate & clear out any old cached versions
+// Clear old cache files when updated
 self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches.keys().then((cacheNames) => {
@@ -18,21 +18,19 @@ self.addEventListener('activate', (event) => {
             );
         })
     );
-    self.clients.claim(); // MAGIC FIX: Take control of the open app instantly!
+    self.clients.claim();
 });
 
-// 3. Network-First Strategy: Always try to get the newest file from GitHub first
+// Always check GitHub for fresh code first
 self.addEventListener('fetch', (event) => {
     event.respondWith(
         fetch(event.request).then((response) => {
-            // Network succeeded! Update the cache quietly in the background
             const responseClone = response.clone();
             caches.open(CACHE_NAME).then((cache) => {
                 cache.put(event.request, responseClone);
             });
-            return response; // Return the fresh file
+            return response;
         }).catch(() => {
-            // Offline? Use the cached version
             return caches.match(event.request);
         })
     );
