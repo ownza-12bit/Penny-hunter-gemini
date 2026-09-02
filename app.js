@@ -1,62 +1,69 @@
-// ==========================================
-// 1. AUTO-UPDATING SERVICE WORKER REGISTRATION
-// ==========================================
+// Auto-Updating Service Worker Registration
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        // Make sure this matches the name of your service worker file!
         navigator.serviceWorker.register('./sw.js')
             .then(registration => {
-                console.log('ServiceWorker registered successfully');
-                // Force check for updates while the app is open
+                console.log('ServiceWorker registered');
                 registration.update();
             })
-            .catch(error => {
-                console.log('ServiceWorker registration failed:', error);
-            });
+            .catch(err => console.log('ServiceWorker failed', err));
     });
 }
 
-// ==========================================
-// 2. REDDIT DEAL FINDER LOGIC
-// ==========================================
+// Multi-Proxy Live Deal Scanner
 async function fetchCommunityDeals() {
     const intelList = document.getElementById("community-intel-list");
+    intelList.innerHTML = '<p class="status-msg">Scanning Reddit for deals... 📡</p>';
+
+    const targetUrl = 'https://www.reddit.com/r/HomeDepot/search.json?q=clearance+OR+penny&restrict_sr=on&sort=new';
     
-    // Give immediate visual feedback that the button was tapped
-    intelList.innerHTML = "<p>Scanning Reddit for deals... 📡</p>";
+    // Tries 3 separate backup servers automatically so fetching never crashes
+    const proxies = [
+        'https://api.allorigins.win/raw?url=',
+        'https://api.codetabs.com/v1/proxy?quest=',
+        'https://corsproxy.io/?'
+    ];
 
-    try {
-        // Bypass Reddit's block using a free proxy
-        const targetUrl = 'https://www.reddit.com/r/HomeDepot/search.json?q=clearance+OR+penny&restrict_sr=on&sort=new';
-        const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl);
+    let data = null;
+    let lastError = "";
 
-        const response = await fetch(proxyUrl);
-        
-        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-
-        const data = await response.json();
-        intelList.innerHTML = ""; // Clear loading message
-
-        const posts = data.data.children;
-        if (posts.length === 0) {
-            intelList.innerHTML = "<p>No recent intel found.</p>";
-            return;
+    for (let proxy of proxies) {
+        try {
+            const response = await fetch(proxy + encodeURIComponent(targetUrl));
+            if (!response.ok) continue;
+            
+            const rawText = await response.text();
+            data = JSON.parse(rawText);
+            if (data && data.data && data.data.children) {
+                break; // Connection succeeded! Exit the loop
+            }
+        } catch (err) {
+            lastError = err.message;
         }
-
-        // Display the top 5 posts
-        posts.slice(0, 5).forEach(post => {
-            const postData = post.data;
-            intelList.innerHTML += `
-                <div style="border-bottom: 1px solid #ccc; padding: 10px 0; margin-bottom: 10px;">
-                    <strong>${postData.title}</strong><br>
-                    <a href="https://www.reddit.com${postData.permalink}" target="_blank">Read more</a>
-                </div>
-            `;
-        });
-
-    } catch (error) {
-        // Force the error to show up ON the phone screen
-        intelList.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
-        alert("Debug info: " + error.message); 
     }
+
+    if (!data || !data.data || !data.data.children) {
+        intelList.innerHTML = `<p style="color:#d9534f; text-align:center;">Unable to reach Reddit feed right now. Please tap scan again.<br><small style="color:#888;">(${lastError || 'Network timeout'})</small></p>`;
+        return;
+    }
+
+    const posts = data.data.children;
+    if (posts.length === 0) {
+        intelList.innerHTML = '<p class="status-msg">No recent deal posts found.</p>';
+        return;
+    }
+
+    let html = '';
+    posts.slice(0, 5).forEach(post => {
+        const p = post.data;
+        const cleanTitle = p.title.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        html += `
+            <div class="deal-item">
+                <div class="deal-title">${cleanTitle}</div>
+                <a class="deal-link" href="https://www.reddit.com${p.permalink}" target="_blank" rel="noopener">View post on Reddit →</a>
+            </div>
+        `;
+    });
+
+    intelList.innerHTML = html;
 }
