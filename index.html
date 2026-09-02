@@ -4,62 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Penny Hunter</title>
-    
-    <!-- Link to your manifest file so it can be installed on phones -->
     <link rel="manifest" href="manifest.json">
-    
     <style>
+        * { box-sizing: border-box; }
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f4f4f6;
             margin: 0;
-            padding: 20px;
+            padding: 16px;
+            color: #333;
+        }
+        .header {
             text-align: center;
+            padding: 10px 0 20px 0;
         }
-        h1 {
-            color: #f96302; /* Home Depot Orange */
+        .header h1 {
+            margin: 0;
+            color: #f96302;
+            font-size: 28px;
         }
-        button {
+        .header p {
+            margin: 5px 0 0 0;
+            color: #666;
+            font-size: 14px;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .btn {
             background-color: #f96302;
             color: white;
             border: none;
-            padding: 15px 25px;
-            font-size: 18px;
+            padding: 14px;
+            font-size: 16px;
             font-weight: bold;
             border-radius: 8px;
-            cursor: pointer;
             width: 100%;
-            max-width: 400px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        button:active {
+        .btn:active {
             background-color: #d15000;
         }
-        #community-intel-list {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            text-align: left;
-            max-width: 400px;
-            margin: 0 auto;
+        .btn-secondary {
+            background-color: #333;
+        }
+        .deal-item {
+            border-bottom: 1px solid #eee;
+            padding: 12px 0;
+        }
+        .deal-item:last-child {
+            border-bottom: none;
+        }
+        .deal-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 6px;
+        }
+        .deal-link {
+            color: #f96302;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .status-msg {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            padding: 10px 0;
         }
     </style>
 </head>
 <body>
 
-    <h1>Penny Hunter 🎯</h1>
-    
-    <!-- The Button -->
-    <button onclick="fetchCommunityDeals()">📡 LIVE COMMUNITY INTEL</button>
-
-    <!-- The Box Where Reddit Deals Appear -->
-    <div id="community-intel-list">
-        <p style="text-align:center; color:#666;">Press the button to scan for recent clearance and penny deals.</p>
+    <div class="header">
+        <h1>Penny Hunter 🎯</h1>
+        <p>Home Depot Clearance & Deals Scanner</p>
     </div>
 
-    <!-- Link to your JavaScript -->
+    <div class="card">
+        <button class="btn" onclick="fetchCommunityDeals()">📡 LIVE COMMUNITY INTEL</button>
+        <div id="community-intel-list">
+            <p class="status-msg">Tap the button above to scan for live clearance posts.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-top:0;">🛠️ Hunter Tools</h3>
+        <button class="btn btn-secondary" onclick="alert('Quick SKU check feature active')">🔍 Quick SKU Check</button>
+        <button class="btn btn-secondary" onclick="alert('Calculator active')">🧮 Clearance Discount Calc</button>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
