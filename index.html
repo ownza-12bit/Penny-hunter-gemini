@@ -35,6 +35,19 @@
             margin-bottom: 16px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        input {
+            padding: 14px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 100%;
+        }
         .btn {
             background-color: #f96302;
             color: white;
@@ -45,39 +58,19 @@
             border-radius: 8px;
             width: 100%;
             cursor: pointer;
-            margin-bottom: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
         }
-        .btn:active {
-            background-color: #d15000;
-        }
-        .btn-secondary {
-            background-color: #333;
-        }
-        .deal-item {
-            border-bottom: 1px solid #eee;
-            padding: 12px 0;
-        }
-        .deal-item:last-child {
-            border-bottom: none;
-        }
-        .deal-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #222;
-            margin-bottom: 6px;
-        }
-        .deal-link {
-            color: #f96302;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-        }
-        .status-msg {
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-            padding: 10px 0;
+        .btn:active { background-color: #d15000; }
+        .btn-blue { background-color: #004990; }
+        .btn-blue:active { background-color: #003366; }
+        .btn-brick { background-color: #d9534f; }
+        .btn-brick:active { background-color: #c9302c; }
+        .btn-dark { background-color: #333; }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
         }
     </style>
 </head>
@@ -85,20 +78,28 @@
 
     <div class="header">
         <h1>Penny Hunter 🎯</h1>
-        <p>Home Depot Clearance & Deals Scanner</p>
+        <p>Home Depot & Lowe's Scanner</p>
     </div>
 
     <div class="card">
-        <button class="btn" onclick="fetchCommunityDeals()">📡 LIVE COMMUNITY INTEL</button>
-        <div id="community-intel-list">
-            <p class="status-msg">Tap the button above to scan for live clearance posts.</p>
+        <h3 style="margin-top:0;">🧱 BrickSeek Inventory Checker</h3>
+        <p style="font-size: 14px; color: #666;">Enter a SKU to instantly check local hidden clearance inventory. (No fetch errors!)</p>
+        
+        <div class="input-group">
+            <input type="text" id="sku-input" placeholder="Enter SKU or UPC..." inputmode="numeric">
+        </div>
+
+        <div class="grid-2">
+            <button class="btn" onclick="checkBrickSeek('homedepot')">HD BrickSeek</button>
+            <button class="btn btn-blue" onclick="checkBrickSeek('lowes')">Lowe's BrickSeek</button>
         </div>
     </div>
 
     <div class="card">
-        <h3 style="margin-top:0;">🛠️ Hunter Tools</h3>
-        <button class="btn btn-secondary" onclick="alert('Quick SKU check feature active')">🔍 Quick SKU Check</button>
-        <button class="btn btn-secondary" onclick="alert('Calculator active')">🧮 Clearance Discount Calc</button>
+        <h3 style="margin-top:0;">📡 Community Deal Links</h3>
+        <p style="font-size: 14px; color: #666;">Jump directly to live deal feeds.</p>
+        <button class="btn btn-brick" onclick="window.open('https://slickdeals.net/newsearch.php?q=home+depot+clearance', '_blank')">🔥 Search Slickdeals</button>
+        <button class="btn btn-dark" onclick="window.open('https://www.reddit.com/r/HomeDepot/search/?q=clearance+OR+penny&sort=new', '_blank')">💬 Reddit HD Clearance</button>
     </div>
 
     <script src="app.js"></script>
