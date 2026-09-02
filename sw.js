@@ -1,4 +1,4 @@
-const CACHE_NAME = 'penny-hunter-v3';
+const CACHE_NAME = 'penny-hunter-v5';
 
 // Install immediately without waiting for app close
 self.addEventListener('install', (event) => {
