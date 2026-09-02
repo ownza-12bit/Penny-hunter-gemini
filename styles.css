@@ -1,0 +1,67 @@
+:root {
+    --bg-dark: #121212;
+    --card-bg: #1e1e1e;
+    --text-light: #ffffff;
+    --text-muted: #aaaaaa;
+    --accent-gold: #ffd700;
+    --accent-red: #ff4444;
+    --accent-green: #00C851;
+    --accent-blue: #33b5e5;
+    --btn-bg: #2a2a2a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+
+body { background: var(--bg-dark); color: var(--text-light); padding-bottom: 20px; }
+
+header { padding: 15px; background: #000; text-align: center; border-bottom: 1px solid #333; }
+header h1 { font-size: 24px; color: var(--accent-gold); }
+#active-store-display { font-size: 12px; color: var(--text-muted); margin-top: 5px; }
+
+.view { display: none; padding: 15px; }
+.view.active { display: block; }
+
+.grid-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.btn-large { 
+    background: var(--btn-bg); color: white; border: 1px solid #444; 
+    padding: 20px 10px; border-radius: 8px; font-size: 14px; font-weight: bold; 
+    text-transform: uppercase; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+.btn-large.highlight { background: #d32f2f; border-color: #f44336; }
+.search-box { display: flex; gap: 10px; }
+.search-box input { flex: 1; padding: 12px; border-radius: 6px; border: none; background: #333; color: white; }
+.search-box button { padding: 12px 20px; background: #555; color: white; border: none; border-radius: 6px; }
+
+.btn-back { background: transparent; color: var(--accent-blue); border: none; padding: 10px 0; font-size: 16px; margin-bottom: 10px; }
+
+/* Form Elements */
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px; }
+.form-group input, .form-group select { width: 100%; padding: 12px; background: #333; border: 1px solid #444; color: white; border-radius: 6px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.checkbox { display: flex; align-items: center; gap: 10px; }
+.checkbox input { width: 20px; height: 20px; }
+.checkbox label { margin: 0; font-size: 14px; color: white; }
+
+.retailer-links { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 20px; }
+.btn-link { background: #333; color: white; border: 1px solid #555; padding: 8px 12px; border-radius: 4px; font-size: 12px; }
+
+/* Score Card */
+.score-card { background: #000; padding: 15px; border-radius: 8px; border: 1px dashed #555; margin-top: 15px; }
+.score-card p { margin-bottom: 5px; font-size: 14px; }
+
+/* Deal Card (Feed) */
+.deal-card { background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 5px solid #555; }
+.deal-card.penny { border-left-color: var(--accent-gold); }
+.deal-card.sale { border-left-color: var(--accent-red); }
+.deal-card h3 { font-size: 16px; margin-bottom: 5px; display: flex; justify-content: space-between; }
+.deal-card .price-row { display: flex; justify-content: space-between; font-size: 18px; font-weight: bold; margin: 10px 0; }
+.deal-card .meta { font-size: 12px; color: var(--text-muted); margin-bottom: 2px; }
+.deal-card .warning { color: var(--accent-red); font-weight: bold; font-size: 12px; }
+.card-actions { display: flex; gap: 10px; margin-top: 10px; }
+.card-actions button { flex: 1; padding: 10px; background: #333; color: white; border: none; border-radius: 4px; }
+
+/* Scanner */
+#video-container { width: 100%; height: 300px; background: #000; overflow: hidden; border-radius: 8px; position: relative; }
+#camera-stream { width: 100%; height: 100%; object-fit: cover; }
+#scanner-status { text-align: center; margin-top: 10px; color: var(--accent-gold); }
