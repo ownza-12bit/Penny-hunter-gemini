@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- HEADER -->
     <header>
         <h1>Penny Hunter</h1>
         <div id="active-store-display">📍 Phoenix, OR | HD #8557</div>
@@ -17,6 +16,8 @@
 
     <!-- MAIN DASHBOARD -->
     <main id="view-home" class="view active">
+        <button onclick="app.fetchCommunityDeals()" class="btn-large highlight" style="width:100%; margin-bottom:15px;">📡 LIVE COMMUNITY INTEL</button>
+
         <div class="grid-buttons">
             <button onclick="app.filterDeals('penny')" class="btn-large">🪙 POSSIBLE PENNIES</button>
             <button onclick="app.filterDeals(90)" class="btn-large">🔥 90%+ OFF</button>
@@ -26,7 +27,6 @@
             <button onclick="app.filterDeals('lowes')" class="btn-large">🔵 LOWE'S</button>
             <button onclick="app.startScanner()" class="btn-large highlight">📷 SCAN BARCODE</button>
             <button onclick="app.showWatchlist()" class="btn-large">⭐ WATCHLIST</button>
-            <button onclick="app.showSettings()" class="btn-large">⚙️ SETTINGS</button>
         </div>
         
         <div class="search-box">
@@ -35,14 +35,22 @@
         </div>
     </main>
 
-    <!-- LIST / WATCHLIST VIEW -->
+    <!-- COMMUNITY INTEL FEED VIEW -->
+    <main id="view-community" class="view">
+        <button class="btn-back" onclick="app.navigate('view-home')">← Back to Home</button>
+        <h2>Community Intel Feed</h2>
+        <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Live deal posts from Reddit clearance communities</p>
+        <div id="community-list-container">Loading live intel...</div>
+    </main>
+
+    <!-- WATCHLIST VIEW -->
     <main id="view-list" class="view">
         <button class="btn-back" onclick="app.navigate('view-home')">← Back to Home</button>
         <h2 id="list-title">Results</h2>
         <div id="deal-list-container"></div>
     </main>
 
-    <!-- DEAL ENTRY / EDIT VIEW -->
+    <!-- DEAL CALCULATOR VIEW -->
     <main id="view-deal" class="view">
         <button class="btn-back" onclick="app.navigate('view-home')">← Cancel</button>
         <h2>Deal Calculator</h2>
@@ -86,7 +94,7 @@
         
         <div class="form-group checkbox">
             <input type="checkbox" id="deal-verified">
-            <label for="deal-verified">This price is VERIFIED (Not a prediction)</label>
+            <label for="deal-verified">This price is VERIFIED</label>
         </div>
 
         <div class="grid-2">
@@ -100,9 +108,7 @@
             </div>
         </div>
 
-        <div id="live-scores" class="score-card">
-            <!-- Populated via JS -->
-        </div>
+        <div id="live-scores" class="score-card"></div>
 
         <button class="btn-large highlight" style="margin-top:20px" onclick="app.saveDeal()">💾 SAVE TO WATCHLIST</button>
     </main>
